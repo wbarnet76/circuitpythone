@@ -1,28 +1,93 @@
-# CPyProjectTemplate
-Put a description for your project here!
-This repo is a template VS code project for CircuitPython projects that automatically uploads your code to the board when you press F5. Requires F5Anything extension.
-## Use
-### Every new project:
-1. Make a GitHub account if you don't have one with your normal school credentials and sign into it.
-2. Click the big green Use This Template button at the top of this page.
-3. Name the new repository something appropriate to the purpose of your project (Your first one should probably be named `CircuitPython`).
-4. Hit "Create repository from template." (The default settings should be fine.)
-5. Open VS Code on your machine. Click Clone Repository.
-6. Paste in the link to the new repository you've just created from the template and hit enter.
-7. For the location, select the "STUDENT" drive if you have it or the document folder if you don't.
-8. Hit "Open Cloned Directory."
-9. Install the reccomended extensions when you get that popup in the lower right corner.
-### To commit from VS Code:
-1. Go to the little branch icon in the left bar of VS Code.
-2. Click the + icon next  to the files you want to commit.
-3. Write a message that descibes your changes in the "Message" box and hit commit.
-4. If you get an error about user.name and user.email, see the next section.
-5. Click the "Sync changes" button.
-### If you get an error about user.name and user.email
-1. In VS Code, hit `` Ctrl+Shift+` ``
-2. Filling in your actual information, run the following commands one line at a time. The paste shortcut is `Ctrl+V` or you can right click then hit paste. Spelling must match exactly:
+## Bowling_Ball_Arm 
+
+### Description & Code
+The purpose of this assignment was to create a specialized robot arm. The arm we created was a gravity-run mini bowling ball arm. The box was on a turn table, and then the arm itself was on an ball bearing axel. There was a servo with an arm above it that would spin and lock in the arm and then keep spinning to raise it. Then when it reached a certain angle the crank arm would slide out. After it would slide out then the arm would be free to swing down on the axel. Then a button would be pressed and the clamps would release the ball and it would fly forward hitting the targets. In total there would be 4 buttons and a potentiometer. The buttons would control the servo to lift up the arm and the release of the claw. The potentiometer would control the heading of the turntable. 
+```python
+import time
+import board
+import pwmio
+import simpleio 
+from adafruit_motor import servo
+from analogio import AnalogIn 
+from digitalio import DigitalInOut, Direction, Pull
+
+button_a = DigitalInOut(board.D1)
+button_a.direction = Direction.INPUT
+button_a.pull = Pull.DOWN
+
+button_b = DigitalInOut(board.D2)
+button_b.direction = Direction.INPUT
+button_b.pull = Pull.DOWN
+
+button_c = DigitalInOut(board.D3)
+button_c.direction = Direction.INPUT
+button_c.pull = Pull.DOWN
+
+button_d = DigitalInOut(board.D4)
+button_d.direction = Direction.INPUT
+button_d.pull = Pull.DOWN
+
+pot = AnalogIn(board.A1)   
+
+# create a PWMOut object on Pin A2.
+pwm_servo = pwmio.PWMOut(board.D9, duty_cycle=2 ** 15, frequency=50)
+pwm_servo1 = pwmio.PWMOut(board.D10, duty_cycle=2 ** 15, frequency=50)
+pwm_servo2 = pwmio.PWMOut(board.D11, duty_cycle=2 ** 15, frequency=50)
+
+
+# Create a servo object, my_servo.
+my_servo = servo.ContinuousServo(pwm_servo, min_pulse=1000, max_pulse=2000)  # tune pulse for specific servo
+my_servo1 = servo.Servo(pwm_servo1)
+my_servo2 = servo.Servo(pwm_servo2)
+
+while True:
+    if button_a.value:
+        my_servo.throttle  = 1
+        print("servo counterclockwise")
+        time.sleep(0.1)
+    elif button_b.value:
+        my_servo.throttle = -.05
+        print("servo clockwise")
+        time.sleep(0.1)
+
+    elif button_c.value:
+        my_servo1.angle = 0
+        print("servo 1 counterclockwise")
+        time.sleep(0.1)
+    elif button_d.value:
+        my_servo1.angle = 180
+        print("servo 1 clockwise")
+        time.sleep(0.1)
+
+    else:
+        print((int(simpleio.map_range(pot.value,0,65535,0,180)) ))
+        newpot = int(simpleio.map_range(pot.value,0,65535,0,180))
+        my_servo2.angle = newpot
+
+        my_servo.throttle = 0
+        print("servo off")
+        time.sleep(0.1)
 ```
-git config --global user.name YOURUSERNAME
-git config --global user.email YOURSCHOOLEMAIL
-```
-3. Return to step 3 of the previous section.
+### Prototype:
+
+![prototype_pic](/docs/IMG-5075.jpg)
+
+
+### Circuit with all the servos running:
+
+#### Crank/release servo:
+
+![big_servo_1](/docs/ezgif.com-video-to-gif%20(5).gif)
+#### Turntable servo:
+![big_servo_2](/docs/ezgif.com-video-to-gif%20(6).gif)
+#### Gripper servo:
+![small_servo](/docs/ezgif.com-video-to-gif%20(7).gif)
+
+
+### Assembled CAD (as is):
+
+![CAD](/docs/cadarm.png)
+### Wiring
+![robotarm](https://github.com/vjones2906/circuitPython/blob/master/docs/robotarm_wiring.png)
+### Reflection
+This project was a challenge for my group. We didn't end up finishing everything and didn't even laser cut the CAD model. The plan was to split the CAD and code between the group members so that Vinnie did all the code and did the circuit while Will did all the CAD. Vinnie ended up finishing the code early and jonied will in trying to finish the CAD. Beacause of how the dimensions were done in CAD before Vinnie came, he had to define and redo most of the dimensions. This slowed down the proccess significantly. The group spent time making CAD parts before thinking them through to completion, which only made more work for them later. Will also missed quite a few days during the in-class time to work on the project, and not all the classtime we had was spent in a productive matter. If the group had spent any amount of time on the project after school or if they used the time they had wisely, the project could have been completed. In the end the group had a perfectly functioning circuit and code, a CAD document that was close to completion, and a prototype. All the group had to do to complete their project was finish, cut, and assemble the CAD shell. 
