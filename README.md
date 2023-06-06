@@ -101,7 +101,9 @@ This project was a challenge for my group. We didn't end up finishing everything
 
 https://github.com/wbarnet76/circuitpythone/assets/71402909/dfb7f9e0-965e-458a-bc1d-e2979a15df4f
 
+###Reflection
 
+for this project i saw Mr derolf's car thet he had made and it looked like a fun chalenge i was not ready for the chalenge tho. most of this project was above my coding abulty not because of the class but becuse of my own skill or lack there of. i reused a car that i had made for last years drag race and made modafacations on it to make it fit my new projects needs. the car had some flaws that i had not forseen like the axle and the thing tat he;d the axle was not built to leave room for movment or the ultrasonic plate was eyeballed and not made to the acual mesurments of the real life senser. the down fall of this project was the fact that me and matt may make a good freands but we get no work done because of that and so we spent most of the time aguing about the best fruit or best fast food frys and not acualy woking. 
 
 
 
